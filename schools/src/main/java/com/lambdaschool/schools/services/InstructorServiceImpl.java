@@ -41,42 +41,9 @@ public class InstructorServiceImpl implements InstructorService {
        ResponseEntity<Slip> newAdvice = restTemplate.exchange("http://api.adviceslip.com/advice", HttpMethod.GET, null, responseType);
         System.out.println(newAdvice);
 
-        SlipElement slipsElement = newAdvice.getBody().getSlips().get(0);
+        SlipElement slipElement = newAdvice.getBody().getSlip().get(0);
 
        instructor.setAdvice(slipElement.getAdvice());
         return instructor;
     }
 }
-
- //@Override
-//    public Instructor addAdvice(
-//        long id,
-//        String searchTerm)
-//    {
-//        Instructor updatedInstructor = instructorrepos.findById(id)
-//            .orElseThrow(() -> new ResourceNotFoundException("Instructor id " + id + " not found!"));
-//        /**
-//         * Creates the object that is needed to do a client side Rest API call.
-//         * We are the client getting data from a remote API.
-//         */
-//        RestTemplate restTemplate = new RestTemplate();
-//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-//        restTemplate.getMessageConverters().add(converter);
-//        // create the url to access the country data
-//        String requestURL = "http://api.adviceslip.com/advice/search/" + searchTerm;
-//        // create the responseType expected. Notice the slip is the data type we are expecting back from the API!
-//        ParameterizedTypeReference<Slips> responseType = new ParameterizedTypeReference<>()
-//        {
-//        };
-//        // create the response entity. do the get and get back information
-//        ResponseEntity<Slips> responseEntity = restTemplate.exchange(requestURL,
-//            HttpMethod.GET,
-//            null,
-//            responseType);
-//        System.out.println(responseEntity);
-//        // now that we have our data, put it into our object!
-//        SlipsElement slipsElement = responseEntity.getBody().getSlips().get(0);
-//        updatedInstructor.setAdvice(slipsElement.getAdvice());
-//        return updatedInstructor;
-//    }

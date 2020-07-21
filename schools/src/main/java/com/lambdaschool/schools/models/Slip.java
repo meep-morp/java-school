@@ -35,8 +35,6 @@ public class Slip {
         this.advice = advice;
     }
 
-    public getSlip() { return super() };
-
     @Override
     public String toString() {
         return super.toString();
