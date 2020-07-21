@@ -2,16 +2,8 @@ package com.lambdaschool.schools.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "courses")
 public class Course
-    extends Auditable
-{
+        extends Auditable {
     /**
      * Primary key (long) for this course
      */
@@ -34,8 +25,9 @@ public class Course
     /**
      * Name (String) of this Course. Cannot be null and must be unique
      */
-    @Column(nullable = true,
-        unique = true)
+    @Column(nullable = false,
+            unique = true)
+    @Size(min = 2, max = 50, message = "Name length must be between 2 and 30 characters")
     private String coursename;
 
     /**
@@ -46,9 +38,9 @@ public class Course
      */
     @ManyToOne
     @JoinColumn(name = "instructorid",
-        nullable = false)
+            nullable = false)
     @JsonIgnoreProperties(value = "courses",
-        allowSetters = true)
+            allowSetters = true)
     private Instructor instructor;
 
     /**
@@ -56,9 +48,9 @@ public class Course
      * connects course to a course student combination
      */
     @OneToMany(mappedBy = "course",
-        cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     @JsonIgnoreProperties(value = "course",
-        allowSetters = true)
+            allowSetters = true)
     private List<StudCourses> students = new ArrayList<>();
 
     /**
@@ -66,8 +58,7 @@ public class Course
      *
      * @return the primary key (long) for this course
      */
-    public long getCourseid()
-    {
+    public long getCourseid() {
         return courseid;
     }
 
@@ -76,8 +67,7 @@ public class Course
      *
      * @param courseid the new primary key (long) for this course
      */
-    public void setCourseid(long courseid)
-    {
+    public void setCourseid(long courseid) {
         this.courseid = courseid;
     }
 
@@ -86,8 +76,7 @@ public class Course
      *
      * @return The name (String) of this course
      */
-    public String getCoursename()
-    {
+    public String getCoursename() {
         return coursename;
     }
 
@@ -96,8 +85,7 @@ public class Course
      *
      * @param coursename the new name (String) for this course
      */
-    public void setCoursename(String coursename)
-    {
+    public void setCoursename(String coursename) {
         this.coursename = coursename;
     }
 
@@ -106,8 +94,7 @@ public class Course
      *
      * @return A list of course student combinations for this course
      */
-    public List<StudCourses> getStudents()
-    {
+    public List<StudCourses> getStudents() {
         return students;
     }
 
@@ -116,8 +103,7 @@ public class Course
      *
      * @param students A new list of course student combinations associated with course
      */
-    public void setStudents(List<StudCourses> students)
-    {
+    public void setStudents(List<StudCourses> students) {
         this.students = students;
     }
 
@@ -126,8 +112,7 @@ public class Course
      *
      * @return the full instructor object assigned to this course.
      */
-    public Instructor getInstructor()
-    {
+    public Instructor getInstructor() {
         return instructor;
     }
 
@@ -136,8 +121,7 @@ public class Course
      *
      * @param instructor the new instructor for this course
      */
-    public void setInstructor(Instructor instructor)
-    {
+    public void setInstructor(Instructor instructor) {
         this.instructor = instructor;
     }
 
@@ -147,9 +131,8 @@ public class Course
      * @param student the new student (Student) to add
      */
     public void addStudent(
-        Student student)
-    {
+            Student student) {
         students.add(new StudCourses(this,
-            student));
+                student));
     }
 }

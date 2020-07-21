@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * The Service that works with the Course Model
  */
-public interface CoursesService
-{
+public interface CoursesService {
     /**
      * Returns a list of all the Courses
      *
@@ -45,19 +44,19 @@ public interface CoursesService
      * Delete a student's enrollment in a course
      *
      * @param studentid the student id of the student to unenroll
-     * @param courseid the course id of the course the student is unenrolling
+     * @param courseid  the course id of the course the student is unenrolling
      */
     void deleteStudentCourse(
-        long studentid,
-        long courseid);
+            long studentid,
+            long courseid);
 
     /**
      * Enroll a student in a course
      *
      * @param studentid the student id of the student to enroll
-     * @param courseid the course id of the course where the student wishes to enroll
+     * @param courseid  the course id of the course where the student wishes to enroll
      */
     public void addStudCourses(
-        long studentid,
-        long courseid);
+            long studentid,
+            long courseid);
 }

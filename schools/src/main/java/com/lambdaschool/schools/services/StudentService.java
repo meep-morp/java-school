@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * The service that works with the Student Model
  */
-public interface StudentService
-{
+public interface StudentService {
     /**
      * Returns a list of all the Students
      *

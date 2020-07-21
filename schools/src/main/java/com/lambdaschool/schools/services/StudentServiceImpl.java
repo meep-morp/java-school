@@ -1,5 +1,6 @@
 package com.lambdaschool.schools.services;
 
+import com.lambdaschool.schools.exceptions.ResourceNotFoundException;
 import com.lambdaschool.schools.models.Course;
 import com.lambdaschool.schools.models.StudCourses;
 import com.lambdaschool.schools.models.Student;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +17,7 @@ import java.util.List;
  */
 @Service(value = "studentService")
 public class StudentServiceImpl
-    implements StudentService
-{
+        implements StudentService {
     /**
      * Connects this service to the Student table.
      */
@@ -32,53 +31,47 @@ public class StudentServiceImpl
     private CoursesService coursesService;
 
     @Override
-    public List<Student> findAll()
-    {
+    public List<Student> findAll() {
         List<Student> list = new ArrayList<>();
         /*
          * findAll returns an iterator set.
          * iterate over the iterator set and add each element to an array list.
          */
         studentrepos.findAll()
-            .iterator()
-            .forEachRemaining(list::add);
+                .iterator()
+                .forEachRemaining(list::add);
         return list;
     }
 
     @Override
-    public Student findStudentById(long id)
-    {
+    public Student findStudentById(long id) {
         return studentrepos.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Student id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Student id " + id + " not found!"));
     }
 
     @Transactional
     @Override
-    public void delete(long id)
-    {
+    public void delete(long id) {
         studentrepos.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Student id " + id + " not found!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Student id " + id + " not found!"));
         studentrepos.deleteById(id);
     }
 
     @Transactional
     @Override
-    public Student save(Student student)
-    {
+    public Student save(Student student) {
         Student newStudent = new Student();
 
-        if (student.getStudentid() != 0)
-        {
+        if (student.getStudentid() != 0) {
             Student oldStudent = studentrepos.findById(student.getStudentid())
-                .orElseThrow(() -> new EntityNotFoundException("Student id " + student.getStudentid() + " not found!"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Student id " + student.getStudentid() + " not found!"));
 
             // delete the courses for the old student we are replacing
-            for (StudCourses ur : oldStudent.getCourses())
-            {
+            for (StudCourses ur : oldStudent.getCourses()) {
                 coursesService.deleteStudentCourse(ur.getStudent()
-                        .getStudentid(),
-                    ur.getCourse()
-                        .getCourseid());
+                                .getStudentid(),
+                        ur.getCourse()
+                                .getCourseid());
             }
             newStudent.setStudentid(student.getStudentid());
         }
@@ -86,21 +79,17 @@ public class StudentServiceImpl
         newStudent.setName(student.getName());
 
         newStudent.getCourses()
-            .clear();
-        if (student.getStudentid() == 0)
-        {
-            for (StudCourses sc : student.getCourses())
-            {
+                .clear();
+        if (student.getStudentid() == 0) {
+            for (StudCourses sc : student.getCourses()) {
                 Course newCourse = coursesService.findCourseById(sc.getCourse()
-                    .getCourseid());
+                        .getCourseid());
 
                 newCourse.addStudent(newStudent);
             }
-        } else
-        {
+        } else {
             // add the new courses for the students we are replacing
-            for (StudCourses sc : student.getCourses())
-            {
+            for (StudCourses sc : student.getCourses()) {
                 coursesService.addStudCourses(newStudent.getStudentid(), sc.getCourse().getCourseid());
             }
         }

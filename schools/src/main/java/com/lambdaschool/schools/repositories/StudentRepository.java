@@ -7,6 +7,5 @@ import org.springframework.data.repository.CrudRepository;
  * The CRUD repository connecting  to the rest of the application
  */
 public interface StudentRepository
-    extends CrudRepository<Student, Long>
-{
+        extends CrudRepository<Student, Long> {
 }

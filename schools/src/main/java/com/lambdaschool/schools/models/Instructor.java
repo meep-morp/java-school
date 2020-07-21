@@ -2,14 +2,8 @@ package com.lambdaschool.schools.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "instructors")
 public class Instructor
-    extends Auditable
-{
+        extends Auditable {
     /**
      * The primary key (long) of the instructor table
      */
@@ -32,6 +25,7 @@ public class Instructor
      * The Instructor's name (String)
      */
     @Column(nullable = false)
+    @Size(min = 2, max = 30, message = "Name length must be between 2 and 30 characters")
     private String name;
 
     /**
@@ -39,16 +33,18 @@ public class Instructor
      * Forms a one to many relationship with courses. One instructor to many courses.
      */
     @OneToMany(mappedBy = "instructor",
-        cascade = CascadeType.ALL,
-        orphanRemoval = true)
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JsonIgnoreProperties("instructor")
     private List<Course> courses = new ArrayList<>();
+
+    @Transient
+    private String advice;
 
     /**
      * Default Constructor used primarily by the JPA.
      */
-    public Instructor()
-    {
+    public Instructor() {
     }
 
     /**
@@ -57,8 +53,7 @@ public class Instructor
      * @param name The name (String) for the new instructor
      */
     public Instructor(
-        String name)
-    {
+            String name) {
         this.name = name;
     }
 
@@ -67,8 +62,7 @@ public class Instructor
      *
      * @return The primary key (long) for this instructor
      */
-    public long getInstructorid()
-    {
+    public long getInstructorid() {
         return instructorid;
     }
 
@@ -77,8 +71,7 @@ public class Instructor
      *
      * @param instructorid The new primary key (long) for this instructor
      */
-    public void setInstructorid(long instructorid)
-    {
+    public void setInstructorid(long instructorid) {
         this.instructorid = instructorid;
     }
 
@@ -87,8 +80,7 @@ public class Instructor
      *
      * @return the instructor name
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -97,8 +89,7 @@ public class Instructor
      *
      * @param name the new instructor name (String) for this instructor
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -107,8 +98,7 @@ public class Instructor
      *
      * @return The list of courses this instructor is teaching
      */
-    public List<Course> getCourses()
-    {
+    public List<Course> getCourses() {
         return courses;
     }
 
@@ -117,8 +107,15 @@ public class Instructor
      *
      * @param courses The new list of courses this instructor is teaching
      */
-    public void setCourses(List<Course> courses)
-    {
+    public void setCourses(List<Course> courses) {
         this.courses = courses;
+    }
+
+    public String getAdvice() {
+        return advice;
+    }
+
+    public void setAdvice(String advice) {
+        this.advice = advice;
     }
 }

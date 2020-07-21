@@ -2,11 +2,7 @@ package com.lambdaschool.schools.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -17,9 +13,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "studcourses")
 public class StudCourses
-    extends Auditable
-    implements Serializable
-{
+        extends Auditable
+        implements Serializable {
     /**
      * Foreign key into the course table
      */
@@ -38,8 +33,7 @@ public class StudCourses
     @JsonIgnoreProperties("courses")
     private Student student;
 
-    public StudCourses()
-    {
+    public StudCourses() {
     }
 
     /**
@@ -49,9 +43,8 @@ public class StudCourses
      * @param student The student object of the course student combination
      */
     public StudCourses(
-        Course course,
-        Student student)
-    {
+            Course course,
+            Student student) {
         this.course = course;
         this.student = student;
     }
@@ -61,8 +54,7 @@ public class StudCourses
      *
      * @return the complete course object of this course student combination
      */
-    public Course getCourse()
-    {
+    public Course getCourse() {
         return course;
     }
 
@@ -71,8 +63,7 @@ public class StudCourses
      *
      * @param course change the course object associated with this course student combination to this one.
      */
-    public void setCourse(Course course)
-    {
+    public void setCourse(Course course) {
         this.course = course;
     }
 
@@ -81,8 +72,7 @@ public class StudCourses
      *
      * @return the complete student object of this course student combination
      */
-    public Student getStudent()
-    {
+    public Student getStudent() {
         return student;
     }
 
@@ -91,30 +81,25 @@ public class StudCourses
      *
      * @param student change the student object associated with this course student combination to this one.
      */
-    public void setStudent(Student student)
-    {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         StudCourses that = (StudCourses) o;
         return getCourse().equals(that.getCourse()) &&
-            getStudent().equals(that.getStudent());
+                getStudent().equals(that.getStudent());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(getCourse(), getStudent());
     }
 }
